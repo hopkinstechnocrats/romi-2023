@@ -4,13 +4,15 @@
 
 package frc.robot.commands;
 
+import frc.robot.sensors.RomiGyro;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-public class AutonomousAngle extends SequentialCommandGroup {
+public class AutonomousBalance extends SequentialCommandGroup {
 
-  public AutonomousAngle(Drivetrain drivetrain) {
+  public AutonomousBalance(Drivetrain drivetrain) {
     addCommands(
-        new DriveAngle(0.5, 20, drivetrain));
+        
+        new DriveBalance(0.5, 20, drivetrain));
   }
 }
