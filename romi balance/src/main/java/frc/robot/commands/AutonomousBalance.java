@@ -13,6 +13,6 @@ public class AutonomousBalance extends SequentialCommandGroup {
   public AutonomousBalance(Drivetrain drivetrain) {
     addCommands(
         
-        new DriveBalance(0.5, 20, drivetrain));
+        new DriveBalance(0.5, 10, drivetrain));
   }
 }

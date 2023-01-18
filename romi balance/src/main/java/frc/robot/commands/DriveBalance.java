@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class DriveBalance extends CommandBase {
   private final Drivetrain m_drive;
-  private final double m_angle;
+  private final double m_deadzoneAngle;
   private final double m_speed;
 
   /**
@@ -20,8 +20,8 @@ public class DriveBalance extends CommandBase {
    * @param inches The number of inches the robot will drive
    * @param drive The drivetrain subsystem on which this command will run
    */
-  public DriveBalance(double speed, double degrees, Drivetrain drive) {
-    m_angle = degrees;
+  public DriveBalance(double speed, double deadzoneDegrees, Drivetrain drive) {
+    m_deadzoneAngle = deadzoneDegrees;
     m_speed = speed;
     m_drive = drive;
     addRequirements(drive);
@@ -39,10 +39,10 @@ public class DriveBalance extends CommandBase {
   @Override
   public void execute() {
     double angle_degrees = m_drive.getGyroAngleY();
-    if(angle_degrees > 1){
+    if(angle_degrees > m_deadzoneAngle/2){
         m_drive.arcadeDrive(m_speed, 0);
     }
-    else if(angle_degrees < -1){
+    else if(angle_degrees < -m_deadzoneAngle/2){
         m_drive.arcadeDrive(-m_speed, 0);
     }
     else {
