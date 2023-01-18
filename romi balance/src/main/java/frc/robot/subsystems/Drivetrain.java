@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.sensors.RomiGyro;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Drivetrain extends SubsystemBase {
@@ -49,6 +50,7 @@ public class Drivetrain extends SubsystemBase {
 
   public void arcadeDrive(double xaxisSpeed, double zaxisRotate) {
     m_diffDrive.arcadeDrive(xaxisSpeed, zaxisRotate);
+    SmartDashboard.putNumber("Power level we want", xaxisSpeed);
   }
 
   public void resetEncoders() {
@@ -134,6 +136,8 @@ public class Drivetrain extends SubsystemBase {
   public void resetGyro() {
     m_gyro.reset();
   }
+
+
 
   @Override
   public void periodic() {

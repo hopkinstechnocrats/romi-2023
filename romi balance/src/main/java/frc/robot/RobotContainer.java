@@ -51,6 +51,8 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    
+    SmartDashboard.putNumber("Power level we want", 0);
     // Configure the button bindings
     configureButtonBindings();
   }
