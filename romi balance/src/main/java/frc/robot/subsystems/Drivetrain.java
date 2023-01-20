@@ -30,6 +30,8 @@ public class Drivetrain extends SubsystemBase {
 
   private final PIDController leftDrivePIDController = new PIDController(Constants.kP_speed, Constants.kI_speed, Constants.kD_speed);
   private final PIDController rightDrivePIDController = new PIDController(Constants.kP_speed, Constants.kI_speed, Constants.kD_speed);
+  private double leftDesiredOutput;
+  private double rightDesiredOutput;
 
   // Set up the differential drive controller
   private final DifferentialDrive m_diffDrive = new DifferentialDrive(m_leftMotor, m_rightMotor);
@@ -59,8 +61,10 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void pidDrive(double leftSpeed, double rightSpeed) {
-    leftDrivePIDController.calculate(xaxisSpeed, leftSpeed);
-    rightDrivePIDController.calculate(xaxisSpeed, rightSpeed);
+    leftDesiredOutput = leftDrivePIDController.calculate(getLeftEncoderRateMps(), leftSpeed);
+    rightDesiredOutput = rightDrivePIDController.calculate(getRightEncoderRateMps(), rightSpeed);
+
+    m_diffDrive.tankDrive(leftDesiredOutput, rightDesiredOutput);
   }
 
   public void resetEncoders() {
