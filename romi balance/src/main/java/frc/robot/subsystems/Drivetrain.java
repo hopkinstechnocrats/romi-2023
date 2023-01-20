@@ -4,9 +4,11 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import frc.robot.Constants;
 import frc.robot.sensors.RomiGyro;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,6 +27,9 @@ public class Drivetrain extends SubsystemBase {
   // to use DIO pins 4/5 and 6/7 for the left and right
   private final Encoder m_leftEncoder = new Encoder(4, 5);
   private final Encoder m_rightEncoder = new Encoder(6, 7);
+
+  private final PIDController leftDrivePIDController = new PIDController(Constants.kP_speed, Constants.kI_speed, Constants.kD_speed);
+  private final PIDController rightDrivePIDController = new PIDController(Constants.kP_speed, Constants.kI_speed, Constants.kD_speed);
 
   // Set up the differential drive controller
   private final DifferentialDrive m_diffDrive = new DifferentialDrive(m_leftMotor, m_rightMotor);
@@ -53,6 +58,11 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Power level we want", xaxisSpeed);
   }
 
+  public void pidDrive(double leftSpeed, double rightSpeed) {
+    leftDrivePIDController.calculate(xaxisSpeed, leftSpeed);
+    rightDrivePIDController.calculate(xaxisSpeed, rightSpeed);
+  }
+
   public void resetEncoders() {
     m_leftEncoder.reset();
     m_rightEncoder.reset();
@@ -65,6 +75,14 @@ public class Drivetrain extends SubsystemBase {
   public int getRightEncoderCount() {
     return m_rightEncoder.get();
   }
+
+  public double getLeftEncoderRateMps() {
+    return m_leftEncoder.getRate()/39.37;
+  } 
+
+  public double getRightEncoderRateMps() {
+    return m_rightEncoder.getRate()/39.37;
+  } 
 
   public double getLeftDistanceInch() {
     return m_leftEncoder.getDistance();
