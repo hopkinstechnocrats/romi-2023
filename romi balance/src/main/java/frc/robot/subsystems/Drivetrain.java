@@ -46,6 +46,7 @@ public class Drivetrain extends SubsystemBase {
 
   NetworkTableInstance m_insta = NetworkTableInstance.getDefault();
   NetworkTable m_pidTable = m_insta.getTable("PID_Table");
+  NetworkTable m_drivetrainTable = m_insta.getTable("Drivetrain_Table");
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
@@ -61,6 +62,9 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void arcadeDrive(double xaxisSpeed, double zaxisRotate) {
+    m_drivetrainTable.getEntry("Left_Current_Speed").setDouble(getLeftEncoderRateMps());
+    m_drivetrainTable.getEntry("Right_Current_Speed").setDouble(getRightEncoderRateMps());
+
     m_diffDrive.arcadeDrive(xaxisSpeed, zaxisRotate);
     SmartDashboard.putNumber("Power level we want", xaxisSpeed);
   }
