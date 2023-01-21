@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants;
 import frc.robot.sensors.RomiGyro;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.networktables.NetworkTable;
@@ -15,11 +16,15 @@ public class AutonomousBalance extends SequentialCommandGroup {
   NetworkTable m_autoTable = m_insta.getTable("Auto_Table");
 
   public AutonomousBalance(Drivetrain drivetrain) {
+
+    m_autoTable.getEntry("Speed").setDouble(Constants.defaultSpeed);
+    m_autoTable.getEntry("Deadzone_Degrees").setDouble(Constants.defaultDegrees);
+
     addCommands(
         
         new DriveBalance(
-          m_autoTable.getEntry("Speed").getDouble(0.05),
-          m_autoTable.getEntry("Deadzone_Degrees").getDouble(10),
+          m_autoTable.getEntry("Speed").getDouble(Constants.defaultSpeed),
+          m_autoTable.getEntry("Deadzone_Degrees").getDouble(Constants.defaultDegrees),
           drivetrain));
   }
 }

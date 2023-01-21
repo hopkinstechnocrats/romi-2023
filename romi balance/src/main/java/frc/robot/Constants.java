@@ -18,4 +18,5 @@ public final class Constants {
     public static final double kP_speed = 2;
 
     public static final double defaultSpeed = 0.1;
+    public static final double defaultDegrees = 10;
 }
