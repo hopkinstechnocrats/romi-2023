@@ -6,13 +6,20 @@ package frc.robot.commands;
 
 import frc.robot.sensors.RomiGyro;
 import frc.robot.subsystems.Drivetrain;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class AutonomousBalance extends SequentialCommandGroup {
+  NetworkTableInstance m_insta = NetworkTableInstance.getDefault();
+  NetworkTable m_autoTable = m_insta.getTable("Auto_Table");
 
   public AutonomousBalance(Drivetrain drivetrain) {
     addCommands(
         
-        new DriveBalance(0.05, 10, drivetrain));
+        new DriveBalance(
+          m_autoTable.getEntry("Speed").getDouble(0.05),
+          m_autoTable.getEntry("Deadzone_Degrees").getDouble(10),
+          drivetrain));
   }
 }

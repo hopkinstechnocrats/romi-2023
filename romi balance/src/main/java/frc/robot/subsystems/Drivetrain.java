@@ -5,6 +5,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -42,6 +44,9 @@ public class Drivetrain extends SubsystemBase {
   // Set up the BuiltInAccelerometer
   private final BuiltInAccelerometer m_accelerometer = new BuiltInAccelerometer();
 
+  NetworkTableInstance m_insta = NetworkTableInstance.getDefault();
+  NetworkTable m_pidTable = m_insta.getTable("PID_Table");
+
   /** Creates a new Drivetrain. */
   public Drivetrain() {
     // We need to invert one side of the drivetrain so that positive voltages
@@ -61,8 +66,23 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void pidDrive(double leftSpeed, double rightSpeed) {
+    m_pidTable.getEntry("Left_Current_Speed").setDouble(getLeftEncoderRateMps());
+    m_pidTable.getEntry("Right_Current_Speed").setDouble(getRightEncoderRateMps());
+
+    leftDrivePIDController.setP(m_pidTable.getEntry("Left_kP").getDouble(0.05));
+    leftDrivePIDController.setI(m_pidTable.getEntry("Left_kI").getDouble(0));
+    leftDrivePIDController.setD(m_pidTable.getEntry("Left_kD").getDouble(0));
+
+    rightDrivePIDController.setP(m_pidTable.getEntry("Right_kP").getDouble(0.05));
+    rightDrivePIDController.setI(m_pidTable.getEntry("Right_kI").getDouble(0));
+    rightDrivePIDController.setD(m_pidTable.getEntry("Right_kD").getDouble(0));
+    
+
     leftDesiredOutput = leftDrivePIDController.calculate(getLeftEncoderRateMps(), leftSpeed);
     rightDesiredOutput = rightDrivePIDController.calculate(getRightEncoderRateMps(), rightSpeed);
+
+    m_pidTable.getEntry("Left_Desired_Speed").setDouble(leftSpeed);
+    m_pidTable.getEntry("Right_Desired_Speed").setDouble(rightSpeed);
 
     m_diffDrive.tankDrive(leftDesiredOutput, rightDesiredOutput);
   }
