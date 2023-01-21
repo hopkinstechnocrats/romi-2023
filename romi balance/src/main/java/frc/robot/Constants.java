@@ -13,7 +13,9 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final double kI_speed = 0;
+    public static final double kI_speed = 1;
     public static final double kD_speed = 0;
-    public static final double kP_speed = 0.05;
+    public static final double kP_speed = 2;
+
+    public static final double defaultSpeed = 0.1;
 }

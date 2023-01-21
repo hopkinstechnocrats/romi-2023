@@ -55,6 +55,11 @@ public class Drivetrain extends SubsystemBase {
     // gearbox is constructed, you might have to invert the left side instead.
     m_rightMotor.setInverted(true);
 
+    m_pidTable.getEntry("kP").setDouble(Constants.kP_speed);
+    m_pidTable.getEntry("kI").setDouble(Constants.kI_speed);
+    m_pidTable.getEntry("kD").setDouble(Constants.kD_speed);
+    
+
     // Use inches as unit for encoder distances
     m_leftEncoder.setDistancePerPulse((Math.PI * kWheelDiameterInch) / kCountsPerRevolution);
     m_rightEncoder.setDistancePerPulse((Math.PI * kWheelDiameterInch) / kCountsPerRevolution);
@@ -73,13 +78,13 @@ public class Drivetrain extends SubsystemBase {
     m_pidTable.getEntry("Left_Current_Speed").setDouble(getLeftEncoderRateMps());
     m_pidTable.getEntry("Right_Current_Speed").setDouble(getRightEncoderRateMps());
 
-    leftDrivePIDController.setP(m_pidTable.getEntry("Left_kP").getDouble(0.05));
-    leftDrivePIDController.setI(m_pidTable.getEntry("Left_kI").getDouble(0));
-    leftDrivePIDController.setD(m_pidTable.getEntry("Left_kD").getDouble(0));
+    leftDrivePIDController.setP(m_pidTable.getEntry("kP").getDouble(0.05));
+    leftDrivePIDController.setI(m_pidTable.getEntry("kI").getDouble(0));
+    leftDrivePIDController.setD(m_pidTable.getEntry("kD").getDouble(0));
 
-    rightDrivePIDController.setP(m_pidTable.getEntry("Right_kP").getDouble(0.05));
-    rightDrivePIDController.setI(m_pidTable.getEntry("Right_kI").getDouble(0));
-    rightDrivePIDController.setD(m_pidTable.getEntry("Right_kD").getDouble(0));
+    rightDrivePIDController.setP(m_pidTable.getEntry("kP").getDouble(0.05));
+    rightDrivePIDController.setI(m_pidTable.getEntry("kI").getDouble(0));
+    rightDrivePIDController.setD(m_pidTable.getEntry("kD").getDouble(0));
     
 
     leftDesiredOutput = leftDrivePIDController.calculate(getLeftEncoderRateMps(), leftSpeed);

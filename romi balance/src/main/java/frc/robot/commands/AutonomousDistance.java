@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -14,8 +15,6 @@ public class AutonomousDistance extends SequentialCommandGroup {
   NetworkTableInstance m_insta = NetworkTableInstance.getDefault();
   NetworkTable m_autoTable = m_insta.getTable("Auto_Table");
 
-  NetworkTableEntry m_SpeedTableEntry;
-
 
   /**
    * Creates a new Autonomous Drive based on distance. This will drive out for a specified distance,
@@ -24,10 +23,10 @@ public class AutonomousDistance extends SequentialCommandGroup {
    * @param drivetrain The drivetrain subsystem on which this command will run
    */
   public AutonomousDistance(Drivetrain drivetrain) {
-    m_SpeedTableEntry = m_autoTable.getEntry("Speed");
+    m_autoTable.getEntry("Speed").setDouble(Constants.defaultSpeed);
 
     addCommands(
-        new DriveDistance(m_SpeedTableEntry.getDouble(0.05),
+        new DriveDistance(m_autoTable.getEntry("Speed").getDouble(0.05),
          20, drivetrain)
     );
   }
