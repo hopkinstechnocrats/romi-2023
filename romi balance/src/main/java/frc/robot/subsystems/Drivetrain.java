@@ -93,8 +93,8 @@ public class Drivetrain extends SubsystemBase {
     additive = m_pidTable.getEntry("kF").getDouble(0);
     
 
-    leftDesiredOutput = additive + leftDrivePIDController.calculate(getLeftEncoderRateMps(), leftSpeed);
-    rightDesiredOutput = additive + rightDrivePIDController.calculate(getRightEncoderRateMps(), rightSpeed);
+    leftDesiredOutput = additive * (leftSpeed)/Math.abs(leftSpeed) + leftDrivePIDController.calculate(getLeftEncoderRateMps(), leftSpeed);
+    rightDesiredOutput = additive * (rightSpeed)/Math.abs(rightSpeed) + rightDrivePIDController.calculate(getRightEncoderRateMps(), rightSpeed);
 
     m_pidTable.getEntry("Left_Desired_Speed").setDouble(leftSpeed);
     m_pidTable.getEntry("Right_Desired_Speed").setDouble(rightSpeed);
