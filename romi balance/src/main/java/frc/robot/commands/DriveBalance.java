@@ -11,6 +11,8 @@ public class DriveBalance extends CommandBase {
   private final Drivetrain m_drive;
   private final double m_deadzoneAngle;
   private final double m_speed;
+  private boolean m_falling = false;
+  private boolean m_direction;
 
   /**
    * Creates a new DriveDistance. This command will drive your your robot for a desired distance at
@@ -38,15 +40,40 @@ public class DriveBalance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double angle_degrees = m_drive.getGyroAngleY();
-    if(angle_degrees > m_deadzoneAngle/2){
-        m_drive.pidDrive(m_speed, m_speed);
+    
+    if(m_falling){
+      m_falling = Math.abs(m_drive.getGyroRateY())>20;
     }
-    else if(angle_degrees < -m_deadzoneAngle/2){
-        m_drive.pidDrive(-m_speed, -m_speed);
+    else{
+      m_falling = Math.abs(m_drive.getGyroRateY())>20;
+      if(m_falling){
+        m_direction = m_drive.getLeftEncoderRateMps()>0;
+      }
     }
-    else {
-        m_drive.pidDrive(0, 0);
+
+
+    if(m_falling == true){
+      if(m_direction){
+        m_drive.arcadeDrive(
+          1, 0);
+      }
+      else{
+        m_drive.arcadeDrive(-1, 0);
+      }
+    }
+    else{
+
+      final double angle_degrees = m_drive.getGyroAngleY();
+    
+      if(angle_degrees > m_deadzoneAngle/2){
+         m_drive.pidDrive(m_speed, m_speed);
+      }
+      else if(angle_degrees < -m_deadzoneAngle/2){
+          m_drive.pidDrive(-m_speed, -m_speed);
+      }
+      else {
+          m_drive.pidDrive(0, 0);
+      }
     }
   }
 

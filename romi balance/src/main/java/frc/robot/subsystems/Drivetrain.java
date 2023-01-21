@@ -78,6 +78,15 @@ public class Drivetrain extends SubsystemBase {
     m_pidTable.getEntry("Left_Current_Speed").setDouble(getLeftEncoderRateMps());
     m_pidTable.getEntry("Right_Current_Speed").setDouble(getRightEncoderRateMps());
 
+    m_drivetrainTable.getEntry("Gyro_Rate_X").setDouble(getGyroRateX());
+    m_drivetrainTable.getEntry("Gyro_Rate_Y").setDouble(getGyroRateY());
+    m_drivetrainTable.getEntry("Gyro_Rate_Z").setDouble(getGyroRateZ());
+
+    m_drivetrainTable.getEntry("Gyro_Angle_X").setDouble(getGyroAngleX());
+    m_drivetrainTable.getEntry("Gyro_Angle_Y").setDouble(getGyroAngleY());
+    m_drivetrainTable.getEntry("Gyro_Angle_Z").setDouble(getGyroAngleZ());
+    
+
     leftDrivePIDController.setP(m_pidTable.getEntry("kP").getDouble(0.05));
     leftDrivePIDController.setI(m_pidTable.getEntry("kI").getDouble(0));
     leftDrivePIDController.setD(m_pidTable.getEntry("kD").getDouble(0));
@@ -181,6 +190,18 @@ public class Drivetrain extends SubsystemBase {
    */
   public double getGyroAngleZ() {
     return m_gyro.getAngleZ();
+  }
+
+  public double getGyroRateX() {
+    return m_gyro.getRateX();
+  }
+
+  public double getGyroRateY() {
+    return m_gyro.getRateY();
+  }
+
+  public double getGyroRateZ() {
+    return m_gyro.getRateZ();
   }
 
   /** Reset the gyro. */
