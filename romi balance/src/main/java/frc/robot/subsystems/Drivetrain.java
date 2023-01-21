@@ -34,6 +34,7 @@ public class Drivetrain extends SubsystemBase {
   private final PIDController rightDrivePIDController = new PIDController(Constants.kP_speed, Constants.kI_speed, Constants.kD_speed);
   private double leftDesiredOutput;
   private double rightDesiredOutput;
+  private double additive;
 
   // Set up the differential drive controller
   private final DifferentialDrive m_diffDrive = new DifferentialDrive(m_leftMotor, m_rightMotor);
@@ -58,6 +59,7 @@ public class Drivetrain extends SubsystemBase {
     m_pidTable.getEntry("kP").setDouble(Constants.kP_speed);
     m_pidTable.getEntry("kI").setDouble(Constants.kI_speed);
     m_pidTable.getEntry("kD").setDouble(Constants.kD_speed);
+    m_pidTable.getEntry("kF").setDouble(Constants.kF_speed);
     
 
     // Use inches as unit for encoder distances
@@ -77,18 +79,22 @@ public class Drivetrain extends SubsystemBase {
   public void pidDrive(double leftSpeed, double rightSpeed) {
     m_pidTable.getEntry("Left_Current_Speed").setDouble(getLeftEncoderRateMps());
     m_pidTable.getEntry("Right_Current_Speed").setDouble(getRightEncoderRateMps());
+    m_drivetrainTable.getEntry("GyroY").setDouble(getGyroY());
+    m_drivetrainTable.getEntry("AngleY").setDouble(getGyroAngleY());
 
     leftDrivePIDController.setP(m_pidTable.getEntry("kP").getDouble(0.05));
     leftDrivePIDController.setI(m_pidTable.getEntry("kI").getDouble(0));
     leftDrivePIDController.setD(m_pidTable.getEntry("kD").getDouble(0));
+    
 
     rightDrivePIDController.setP(m_pidTable.getEntry("kP").getDouble(0.05));
     rightDrivePIDController.setI(m_pidTable.getEntry("kI").getDouble(0));
     rightDrivePIDController.setD(m_pidTable.getEntry("kD").getDouble(0));
+    additive = m_pidTable.getEntry("kF").getDouble(0);
     
 
-    leftDesiredOutput = leftDrivePIDController.calculate(getLeftEncoderRateMps(), leftSpeed);
-    rightDesiredOutput = rightDrivePIDController.calculate(getRightEncoderRateMps(), rightSpeed);
+    leftDesiredOutput = additive + leftDrivePIDController.calculate(getLeftEncoderRateMps(), leftSpeed);
+    rightDesiredOutput = additive + rightDrivePIDController.calculate(getRightEncoderRateMps(), rightSpeed);
 
     m_pidTable.getEntry("Left_Desired_Speed").setDouble(leftSpeed);
     m_pidTable.getEntry("Right_Desired_Speed").setDouble(rightSpeed);
@@ -154,6 +160,18 @@ public class Drivetrain extends SubsystemBase {
    */
   public double getAccelZ() {
     return m_accelerometer.getZ();
+  }
+
+  public double getGyroX() {
+    return m_gyro.getRateX();
+  }
+
+  public double getGyroY() {
+    return m_gyro.getRateY();
+  }
+
+  public double getGyroZ() {
+    return m_gyro.getRateZ();
   }
 
   /**

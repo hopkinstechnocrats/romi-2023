@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.sensors.RomiGyro;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -11,6 +12,7 @@ public class DriveBalance extends CommandBase {
   private final Drivetrain m_drive;
   private final double m_deadzoneAngle;
   private final double m_speed;
+  private final double m_defaultRate;
 
   /**
    * Creates a new DriveDistance. This command will drive your your robot for a desired distance at
@@ -20,10 +22,11 @@ public class DriveBalance extends CommandBase {
    * @param inches The number of inches the robot will drive
    * @param drive The drivetrain subsystem on which this command will run
    */
-  public DriveBalance(double speed, double deadzoneDegrees, Drivetrain drive) {
+  public DriveBalance(double speed, double deadzoneDegrees, double defaultRate, Drivetrain drive) {
     m_deadzoneAngle = deadzoneDegrees;
     m_speed = speed;
     m_drive = drive;
+    m_defaultRate = defaultRate;
     addRequirements(drive);
   }
 
@@ -39,13 +42,27 @@ public class DriveBalance extends CommandBase {
   @Override
   public void execute() {
     double angle_degrees = m_drive.getGyroAngleY();
-    if(angle_degrees > m_deadzoneAngle/2){
+    double angle_rate = m_drive.getGyroY();
+    if(angle_degrees > m_deadzoneAngle/2 && angle_rate < m_defaultRate) {
         m_drive.pidDrive(m_speed, m_speed);
-    }
-    else if(angle_degrees < -m_deadzoneAngle/2){
+    } else if(angle_degrees < -m_deadzoneAngle/2 && angle_rate > -m_defaultRate){
+      m_drive.pidDrive(-m_speed, -m_speed);
+    } else if(angle_rate > m_defaultRate) {
+      m_drive.pidDrive(m_speed, m_speed);
+      try {
+        Thread.sleep(10);
+      } catch (InterruptedException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    } else if(angle_rate < -m_defaultRate){
         m_drive.pidDrive(-m_speed, -m_speed);
-    }
-    else {
+        try {
+          Thread.sleep(10);
+        } catch (InterruptedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+    } else {
         m_drive.pidDrive(0, 0);
     }
   }
