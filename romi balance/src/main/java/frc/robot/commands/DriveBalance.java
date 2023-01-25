@@ -5,6 +5,9 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.Drivetrain;
+
+import javax.lang.model.UnknownEntityException;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class DriveBalance extends CommandBase {
@@ -19,7 +22,7 @@ public class DriveBalance extends CommandBase {
    * a desired speed.
    *
    * @param speed The speed at which the robot will drive
-   * @param inches The number of inches the robot will drive
+   * @param deadzoneDegrees The angle at which the robot will start moving
    * @param drive The drivetrain subsystem on which this command will run
    */
   public DriveBalance(double speed, double deadzoneDegrees, Drivetrain drive) {
@@ -42,12 +45,16 @@ public class DriveBalance extends CommandBase {
   public void execute() {
     
     if(m_falling){
+      // If already falling
       m_falling = Math.abs(m_drive.getGyroRateY())>20;
     }
     else{
+      // Start of falling?????
       m_falling = Math.abs(m_drive.getGyroRateY())>20;
       if(m_falling){
+        // Oh yeah we def started falling
         m_direction = m_drive.getLeftEncoderRateMps()>0;
+        throw new UnknownError();
       }
     }
 
