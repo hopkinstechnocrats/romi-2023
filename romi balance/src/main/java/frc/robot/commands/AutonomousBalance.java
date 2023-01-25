@@ -19,12 +19,14 @@ public class AutonomousBalance extends SequentialCommandGroup {
 
     m_autoTable.getEntry("Speed").setDouble(Constants.defaultSpeed);
     m_autoTable.getEntry("Deadzone_Degrees").setDouble(Constants.defaultDegrees);
+    m_autoTable.getEntry("Max_Wait_Time").setDouble(Constants.maxWaitTime);
 
     addCommands(
         
         new DriveBalance(
           m_autoTable.getEntry("Speed").getDouble(Constants.defaultSpeed),
           m_autoTable.getEntry("Deadzone_Degrees").getDouble(Constants.defaultDegrees),
+          m_autoTable.getEntry("Max_Wait_Time").getDouble(Constants.maxWaitTime),
           drivetrain));
   }
 }

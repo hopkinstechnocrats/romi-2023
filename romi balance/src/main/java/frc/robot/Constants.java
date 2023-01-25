@@ -19,4 +19,5 @@ public final class Constants {
 
     public static final double defaultSpeed = 0.1;
     public static final double defaultDegrees = 10;
+    public static final double maxWaitTime = 10;
 }

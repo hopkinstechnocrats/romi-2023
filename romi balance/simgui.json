@@ -33,6 +33,9 @@
       }
     },
     "transitory": {
+      "Auto_Table": {
+        "open": true
+      },
       "SmartDashboard": {
         "open": true
       }

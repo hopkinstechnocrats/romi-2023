@@ -16,6 +16,8 @@ public class DriveBalance extends CommandBase {
   private final double m_speed;
   private boolean m_falling = false;
   private boolean m_direction;
+  private double m_waitTime;
+  private double m_maxWaitTime;
 
   /**
    * Creates a new DriveDistance. This command will drive your your robot for a desired distance at
@@ -25,11 +27,14 @@ public class DriveBalance extends CommandBase {
    * @param deadzoneDegrees The angle at which the robot will start moving
    * @param drive The drivetrain subsystem on which this command will run
    */
-  public DriveBalance(double speed, double deadzoneDegrees, Drivetrain drive) {
+  public DriveBalance(double speed, double deadzoneDegrees, double maxWaitTime, Drivetrain drive) {
     m_deadzoneAngle = deadzoneDegrees;
     m_speed = speed;
     m_drive = drive;
+    m_waitTime = 0;
+    m_maxWaitTime = maxWaitTime;
     addRequirements(drive);
+    
   }
 
   // Called when the command is initially scheduled.
@@ -51,10 +56,12 @@ public class DriveBalance extends CommandBase {
     else{
       // Start of falling?????
       m_falling = Math.abs(m_drive.getGyroRateY())>20;
-      if(m_falling){
+      if(m_falling && m_waitTime > m_maxWaitTime){
         // Oh yeah we def started falling
         m_direction = m_drive.getLeftEncoderRateMps()>0;
-        throw new UnknownError();
+        m_waitTime = 0;
+      } else {
+        m_waitTime ++;
       }
     }
 
