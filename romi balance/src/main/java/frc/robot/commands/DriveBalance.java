@@ -31,7 +31,8 @@ public class DriveBalance extends CommandBase {
     m_deadzoneAngle = deadzoneDegrees;
     m_speed = speed;
     m_drive = drive;
-    m_waitTime = 0;
+    //Don't wait initially
+    m_waitTime = maxWaitTime;
     m_maxWaitTime = maxWaitTime;
     addRequirements(drive);
     
@@ -42,7 +43,6 @@ public class DriveBalance extends CommandBase {
   public void initialize() {
     m_drive.arcadeDrive(0, 0);
     m_drive.resetEncoders();
-    m_drive.resetGyro();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -56,7 +56,7 @@ public class DriveBalance extends CommandBase {
     else{
       // Start of falling?????
       m_falling = Math.abs(m_drive.getGyroRateY())>20;
-      if(m_falling && m_waitTime > m_maxWaitTime){
+      if(m_falling){
         // Oh yeah we def started falling
         m_direction = m_drive.getLeftEncoderRateMps()>0;
         m_waitTime = 0;
@@ -69,24 +69,28 @@ public class DriveBalance extends CommandBase {
     if(m_falling == true){
       if(m_direction){
         m_drive.arcadeDrive(
-          1, 0);
+          -1, 0);
       }
       else{
-        m_drive.arcadeDrive(-1, 0);
+        m_drive.arcadeDrive(1, 0);
       }
     }
     else{
-
-      final double angle_degrees = m_drive.getGyroAngleY();
+      if (m_waitTime > m_maxWaitTime){
+        final double angle_degrees = m_drive.getGyroAngleY();
     
-      if(angle_degrees > m_deadzoneAngle/2){
+        if(angle_degrees > m_deadzoneAngle/2){
          m_drive.pidDrive(m_speed, m_speed);
+        }
+        else if(angle_degrees < -m_deadzoneAngle/2){
+            m_drive.pidDrive(-m_speed, -m_speed);
+        }
+        else {
+            m_drive.pidDrive(0, 0);
+        }
       }
-      else if(angle_degrees < -m_deadzoneAngle/2){
-          m_drive.pidDrive(-m_speed, -m_speed);
-      }
-      else {
-          m_drive.pidDrive(0, 0);
+      else{
+        m_drive.arcadeDrive(0, 0);
       }
     }
   }

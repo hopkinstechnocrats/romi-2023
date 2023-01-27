@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.AutonomousDistance;
 import frc.robot.commands.AutonomousTime;
+import frc.robot.commands.ResetGyro;
 import frc.robot.commands.AutonomousBalance;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.OnBoardIO;
@@ -80,6 +81,8 @@ public class RobotContainer {
     m_chooser.addOption("Auto Routine Angle", new AutonomousAngle(m_drivetrain));
     m_chooser.addOption("Auto Routine Balance", new AutonomousBalance(m_drivetrain));
     SmartDashboard.putData(m_chooser);
+
+    SmartDashboard.putData("Reset_Gyro", new ResetGyro(m_drivetrain));
   }
 
   /**
