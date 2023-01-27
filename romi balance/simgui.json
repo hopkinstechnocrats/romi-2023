@@ -16,6 +16,7 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Reset_Gyro": "Command",
       "/SmartDashboard/SendableChooser[0]": "String Chooser"
     },
     "windows": {

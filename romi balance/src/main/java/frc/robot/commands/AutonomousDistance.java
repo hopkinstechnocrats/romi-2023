@@ -27,7 +27,7 @@ public class AutonomousDistance extends SequentialCommandGroup {
 
     addCommands(
         new DriveDistance(m_autoTable.getEntry("Speed").getDouble(0.05),
-         20, drivetrain)
+         10, drivetrain)
     );
   }
 }
