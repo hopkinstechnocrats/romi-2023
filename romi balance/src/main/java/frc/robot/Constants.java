@@ -15,10 +15,15 @@ package frc.robot;
 public final class Constants {
     public static final double kI_speed = 1;
     public static final double kD_speed = 0;
-    public static final double kP_speed = 2;
+    public static final double kP_speed = 1;
 
     public static final double defaultSpeed = 0.1;
     public static final double defaultDegrees = 10.0;
     public static final double maxWaitTime = 1000.0;
     public static final double defaultRampUpDistanceInches = 6.5;
+
+    public static final int leftPrimaryMotorCANID = 1;
+    public static final int leftSecondaryMotorCANID = 2;
+    public static final int rightPrimaryMotorCANID = 3;
+    public static final int rightSecondaryMotorCANID = 4;
 }
