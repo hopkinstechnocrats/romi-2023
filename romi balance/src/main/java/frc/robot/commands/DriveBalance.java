@@ -30,7 +30,7 @@ public class DriveBalance extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drive.arcadeDrive(0, 0);
+    m_drive.drive(0, 0);
     m_drive.resetEncoders();
     m_drive.resetGyro();
   }
@@ -40,20 +40,20 @@ public class DriveBalance extends CommandBase {
   public void execute() {
     double angle_degrees = m_drive.getGyroAngleY();
     if(angle_degrees > m_deadzoneAngle/2){
-        m_drive.pidDrive(m_speed, m_speed);
+        m_drive.drive(m_speed, m_speed);
     }
     else if(angle_degrees < -m_deadzoneAngle/2){
-        m_drive.pidDrive(-m_speed, -m_speed);
+        m_drive.drive(-m_speed, -m_speed);
     }
     else {
-        m_drive.pidDrive(0, 0);
+        m_drive.drive(0, 0);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drive.arcadeDrive(0, 0);
+    m_drive.drive(0, 0);
   }
 
   

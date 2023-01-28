@@ -4,7 +4,9 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
@@ -43,7 +45,7 @@ public class Drivetrain extends SubsystemBase {
   
 
   // Set up the RomiGyro
-  private final RomiGyro m_gyro = new RomiGyro();
+  private final AHRS m_gyro = new AHRS();
 
   // Set up the BuiltInAccelerometer
   private final BuiltInAccelerometer m_accelerometer = new BuiltInAccelerometer();
@@ -79,30 +81,34 @@ public class Drivetrain extends SubsystemBase {
   //   SmartDashboard.putNumber("Power level we want", xaxisSpeed);
   // }
 
-  public void pidDrive(double leftSpeed, double rightSpeed) {
-    m_pidTable.getEntry("Left_Current_Speed").setDouble(getLeftEncoderRateMps());
-    m_pidTable.getEntry("Right_Current_Speed").setDouble(getRightEncoderRateMps());
+  // public void pidDrive(double leftSpeed, double rightSpeed) {
+  //   m_pidTable.getEntry("Left_Current_Speed").setDouble(getLeftEncoderRateMps());
+  //   m_pidTable.getEntry("Right_Current_Speed").setDouble(getRightEncoderRateMps());
 
-    leftDrivePIDController.setP(m_pidTable.getEntry("kP").getDouble(0.05));
-    leftDrivePIDController.setI(m_pidTable.getEntry("kI").getDouble(0));
-    leftDrivePIDController.setD(m_pidTable.getEntry("kD").getDouble(0));
+  //   leftDrivePIDController.setP(m_pidTable.getEntry("kP").getDouble(0.05));
+  //   leftDrivePIDController.setI(m_pidTable.getEntry("kI").getDouble(0));
+  //   leftDrivePIDController.setD(m_pidTable.getEntry("kD").getDouble(0));
 
-    rightDrivePIDController.setP(m_pidTable.getEntry("kP").getDouble(0.05));
-    rightDrivePIDController.setI(m_pidTable.getEntry("kI").getDouble(0));
-    rightDrivePIDController.setD(m_pidTable.getEntry("kD").getDouble(0));
+  //   rightDrivePIDController.setP(m_pidTable.getEntry("kP").getDouble(0.05));
+  //   rightDrivePIDController.setI(m_pidTable.getEntry("kI").getDouble(0));
+  //   rightDrivePIDController.setD(m_pidTable.getEntry("kD").getDouble(0));
     
 
-    leftDesiredOutput = leftDrivePIDController.calculate(getLeftEncoderRateMps(), leftSpeed);
-    rightDesiredOutput = rightDrivePIDController.calculate(getRightEncoderRateMps(), rightSpeed);
+  //   leftDesiredOutput = leftDrivePIDController.calculate(getLeftEncoderRateMps(), leftSpeed);
+  //   rightDesiredOutput = rightDrivePIDController.calculate(getRightEncoderRateMps(), rightSpeed);
 
-    m_pidTable.getEntry("Left_Desired_Speed").setDouble(leftSpeed);
-    m_pidTable.getEntry("Right_Desired_Speed").setDouble(rightSpeed);
+  //   m_pidTable.getEntry("Left_Desired_Speed").setDouble(leftSpeed);
+  //   m_pidTable.getEntry("Right_Desired_Speed").setDouble(rightSpeed);
 
-    m_diffDrive.tankDrive(leftDesiredOutput, rightDesiredOutput);
-  }
+  //   m_diffDrive.tankDrive(leftDesiredOutput, rightDesiredOutput);
+  // }
 
   public void drive(double leftSpeed, double rightSpeed) {
-    
+    m_leftPrimaryMotor.set(TalonSRXControlMode.PercentOutput, leftSpeed);
+    m_pidTable.getEntry("Left_Desired_Speed").setDouble(leftSpeed);
+
+    m_rightPrimaryMotor.set(TalonSRXControlMode.PercentOutput, rightSpeed);
+    m_pidTable.getEntry("Right_Desired_Speed").setDouble(rightSpeed);
   }
 
   public void resetEncoders() {
@@ -171,7 +177,7 @@ public class Drivetrain extends SubsystemBase {
    * @return The current angle of the Romi in degrees
    */
   public double getGyroAngleX() {
-    return m_gyro.getAngleX();
+    return m_gyro.getYaw();
   }
 
   /**
@@ -180,7 +186,7 @@ public class Drivetrain extends SubsystemBase {
    * @return The current angle of the Romi in degrees
    */
   public double getGyroAngleY() {
-    return m_gyro.getAngleY();
+    return m_gyro.getRoll();
   }
 
   /**
@@ -189,7 +195,7 @@ public class Drivetrain extends SubsystemBase {
    * @return The current angle of the Romi in degrees
    */
   public double getGyroAngleZ() {
-    return m_gyro.getAngleZ();
+    return m_gyro.getPitch();
   }
 
   /** Reset the gyro. */
