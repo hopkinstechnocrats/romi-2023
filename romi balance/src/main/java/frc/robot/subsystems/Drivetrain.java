@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -22,8 +24,10 @@ public class Drivetrain extends SubsystemBase {
 
   // The Romi has the left and right motors set to
   // PWM channels 0 and 1 respectively
-  private final Spark m_leftMotor = new Spark(0);
-  private final Spark m_rightMotor = new Spark(1);
+  private final TalonSRX m_leftPrimaryMotor = new TalonSRX(Constants.leftPrimaryMotorCANID);
+  private final TalonSRX m_leftSecondaryMotor = new TalonSRX(Constants.leftSecondaryMotorCANID);
+  private final TalonSRX m_rightPrimaryMotor = new TalonSRX(Constants.rightPrimaryMotorCANID);
+  private final TalonSRX m_rightSecondaryMotor = new TalonSRX(Constants.rightSecondaryMotorCANID);
 
   // The Romi has onboard encoders that are hardcoded
   // to use DIO pins 4/5 and 6/7 for the left and right
@@ -36,7 +40,7 @@ public class Drivetrain extends SubsystemBase {
   private double rightDesiredOutput;
 
   // Set up the differential drive controller
-  private final DifferentialDrive m_diffDrive = new DifferentialDrive(m_leftMotor, m_rightMotor);
+  
 
   // Set up the RomiGyro
   private final RomiGyro m_gyro = new RomiGyro();
@@ -53,7 +57,8 @@ public class Drivetrain extends SubsystemBase {
     // We need to invert one side of the drivetrain so that positive voltages
     // result in both sides moving forward. Depending on how your robot's
     // gearbox is constructed, you might have to invert the left side instead.
-    m_rightMotor.setInverted(true);
+    m_leftSecondaryMotor.follow(m_leftPrimaryMotor);
+    m_rightSecondaryMotor.follow(m_rightPrimaryMotor);
 
     m_pidTable.getEntry("kP").setDouble(Constants.kP_speed);
     m_pidTable.getEntry("kI").setDouble(Constants.kI_speed);
@@ -66,13 +71,13 @@ public class Drivetrain extends SubsystemBase {
     resetEncoders();
   }
 
-  public void arcadeDrive(double xaxisSpeed, double zaxisRotate) {
-    m_drivetrainTable.getEntry("Left_Current_Speed").setDouble(getLeftEncoderRateMps());
-    m_drivetrainTable.getEntry("Right_Current_Speed").setDouble(getRightEncoderRateMps());
+  // public void arcadeDrive(double xaxisSpeed, double zaxisRotate) {
+  //   m_drivetrainTable.getEntry("Left_Current_Speed").setDouble(getLeftEncoderRateMps());
+  //   m_drivetrainTable.getEntry("Right_Current_Speed").setDouble(getRightEncoderRateMps());
 
-    m_diffDrive.arcadeDrive(xaxisSpeed, zaxisRotate);
-    SmartDashboard.putNumber("Power level we want", xaxisSpeed);
-  }
+  //   m_diffDrive.arcadeDrive(xaxisSpeed, zaxisRotate);
+  //   SmartDashboard.putNumber("Power level we want", xaxisSpeed);
+  // }
 
   public void pidDrive(double leftSpeed, double rightSpeed) {
     m_pidTable.getEntry("Left_Current_Speed").setDouble(getLeftEncoderRateMps());
@@ -94,6 +99,10 @@ public class Drivetrain extends SubsystemBase {
     m_pidTable.getEntry("Right_Desired_Speed").setDouble(rightSpeed);
 
     m_diffDrive.tankDrive(leftDesiredOutput, rightDesiredOutput);
+  }
+
+  public void drive(double leftSpeed, double rightSpeed) {
+    
   }
 
   public void resetEncoders() {
