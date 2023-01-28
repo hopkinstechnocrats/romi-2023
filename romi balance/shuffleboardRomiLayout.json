@@ -11,7 +11,7 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "3,0": {
+          "5,0": {
             "size": [
               1,
               1
@@ -37,7 +37,7 @@
               "_showGlyph": false
             }
           },
-          "5,0": {
+          "3,0": {
             "size": [
               1,
               1
@@ -147,7 +147,11 @@
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": 1.0,
-              "Y-axis/Unit": "ul"
+              "Y-axis/Unit": "ul",
+              "Visible data/PID_Table/Left_Current_Speed": true,
+              "Visible data/PID_Table/Left_Desired_Speed": true,
+              "Visible data/PID_Table/Right_Current_Speed": true,
+              "Visible data/PID_Table/Right_Desired_Speed": true
             }
           },
           "4,3": {
@@ -172,6 +176,32 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Power level we want",
               "_title": "Power level we want",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "1,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Reset_Gyro",
+              "_title": "Reset_Gyro",
+              "_glyph": 148,
+              "_showGlyph": false
+            }
+          },
+          "3,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///Auto_Table/Distance",
+              "_title": "Auto_Table/Distance",
               "_glyph": 148,
               "_showGlyph": false
             }
@@ -221,7 +251,10 @@
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul"
+              "Y-axis/Unit": "ul",
+              "Visible data/Drivetrain_Table/Gyro_Rate_X": true,
+              "Visible data/Drivetrain_Table/Gyro_Rate_Y": true,
+              "Visible data/Drivetrain_Table/Gyro_Rate_Z": true
             }
           }
         }

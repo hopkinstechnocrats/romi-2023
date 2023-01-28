@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class AutonomousDistance extends SequentialCommandGroup {
   NetworkTableInstance m_insta = NetworkTableInstance.getDefault();
   NetworkTable m_autoTable = m_insta.getTable("Auto_Table");
+  
 
 
   /**
@@ -22,12 +23,16 @@ public class AutonomousDistance extends SequentialCommandGroup {
    *
    * @param drivetrain The drivetrain subsystem on which this command will run
    */
+
+   
   public AutonomousDistance(Drivetrain drivetrain) {
     m_autoTable.getEntry("Speed").setDouble(Constants.defaultSpeed);
-
+    m_autoTable.getEntry("Distance").setDouble(Constants.defaultRampUpDistanceInches);
+    
     addCommands(
         new DriveDistance(m_autoTable.getEntry("Speed").getDouble(0.05),
-         10, drivetrain)
+        m_autoTable.getEntry("Distance").getDouble(0),
+          drivetrain)
     );
   }
 }

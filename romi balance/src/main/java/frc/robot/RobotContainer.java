@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -32,6 +34,9 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drivetrain = new Drivetrain();
   private final OnBoardIO m_onboardIO = new OnBoardIO(ChannelMode.INPUT, ChannelMode.INPUT);
+
+  NetworkTableInstance m_insta = NetworkTableInstance.getDefault();
+  NetworkTable m_autoTable = m_insta.getTable("Auto_Table");
 
   // Assumes a gamepad plugged into channnel 0
   private final Joystick m_controller = new Joystick(0);
@@ -83,6 +88,8 @@ public class RobotContainer {
     SmartDashboard.putData(m_chooser);
 
     SmartDashboard.putData("Reset_Gyro", new ResetGyro(m_drivetrain));
+
+    
   }
 
   /**
