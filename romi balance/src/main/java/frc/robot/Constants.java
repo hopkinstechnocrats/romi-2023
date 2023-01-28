@@ -20,5 +20,5 @@ public final class Constants {
     public static final double defaultSpeed = 0.1;
     public static final double defaultDegrees = 10.0;
     public static final double maxWaitTime = 1000.0;
-    public static final double defaultRampUpDistanceInches = 5.0;
+    public static final double defaultRampUpDistanceInches = 6.5;
 }
